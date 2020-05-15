@@ -1,0 +1,5 @@
+{
+    "tableName": "curriculumusuario",
+    "partitionKeyName": "user_id",
+    "partitionKeyType": "S"
+}

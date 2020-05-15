@@ -1,0 +1,40 @@
+{
+    "paths": [
+        {
+            "name": "/user",
+            "lambdaFunction": "pruebacurriculum",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        }
+    ],
+    "resourceName": "pruebatesis",
+    "apiName": "pruebatesis",
+    "functionArns": [
+        {
+            "lambdaFunction": "pruebacurriculum"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-amplify-api-prueba-dev-181437-authRole",
+        "unAuthRoleName": "amplify-amplify-api-prueba-dev-181437-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "pruebacurriculum",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
