@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -44,192 +44,225 @@ const styles2 = {
 const useStyles = makeStyles(styles, styles2);
 
 export default function UserCurriculum() {
-  const classes = useStyles();
-  return (
-    <div>
-         <Header
-                brand="Proyecto Titulación"
-                rightLinks={<HeaderLinksHome />}
-                fixed
-                color="dark"
-                changeColorOnScroll={{
-                height: 400,
-                color: "white"
-                }}
-                //{...rest}
-        />
+  
+    const [userCurriculum, setUserCurriculum] = useState({
+        firstName: "",
+        lastName: "",
+        cedula: "",
+        telefono: "",
+        categoria: "",
+        trabajo: "",
+        tarifa: "",
+        ciudad: "",
+        pais: "",
+        postalCode: "",
+        aboutMe: "",
+        experiencia: "",
+    });
 
-        <Parallax image={require("assets/img/curriculum.jpg")}>
-            <div className={classes.container}>
-            <GridContainer>
-                <GridItem>
-                <div className={classes.brandgrey}>
-                    <h1 className={classes.title}>Tu Curriculum</h1>
-                    <h3 className={classes.subtitle}>
-                        Aquí Puedes Dar a Conocer lo que Sabes Hacer
-                    </h3>
-                </div>
-                </GridItem>
-            </GridContainer>
-            </div>
-        </Parallax>
-        
-        <div className={classNames(classes.main, classes.mainRaised)}>
-            <div className={classes.container}>
+    const handleCurriculumInput = e => {
+        setUserCurriculum({
+            ...userCurriculum,
+            [e.target.id] : e.target.value
+        });
+        console.log(userCurriculum.firstName);
+    }
+
+    const classes = useStyles();
+    return (
+        <div>
+            <Header
+                    brand="Proyecto Titulación"
+                    rightLinks={<HeaderLinksHome />}
+                    fixed
+                    color="dark"
+                    changeColorOnScroll={{
+                    height: 400,
+                    color: "white"
+                    }}
+                    //{...rest}
+            />
+
+            <Parallax image={require("assets/img/curriculum.jpg")}>
+                <div className={classes.container}>
                 <GridContainer>
-
-                    <GridItem xs={12} sm={12} md={4}>
-                    <UserAvatar />
+                    <GridItem>
+                    <div className={classes.brandgrey}>
+                        <h1 className={classes.title}>Tu Curriculum</h1>
+                        <h3 className={classes.subtitle}>
+                            Aquí Puedes Dar a Conocer lo que Sabes Hacer
+                        </h3>
+                    </div>
                     </GridItem>
-
-                    <GridItem xs={12} sm={12} md={8}>
-                    <Card>
-                        <CardHeader color="warning">
-                            <h3 className={classes.cardTitleWhite}>Curriculum de Trabajo</h3>
-                            <p className={classes.cardCategoryWhite}>Manten tu Curriculum Actualizado</p>
-                        </CardHeader>
-                        <CardBody>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                                labelText="Nombres"
-                                id="first-name"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                                labelText="Apellidos"
-                                id="last-name"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                                labelText="Cedula"
-                                id="cedula"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={6}>
-                            <CustomInput
-                                labelText="Telefono"
-                                id="telefono"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={3}>
-                            <CustomInput
-                                labelText="Categoría Trabajo"
-                                id="category"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={5}>
-                            <CustomInput
-                                labelText="Nombre Trabajo"
-                                id="trabajo"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                            <CustomInput
-                                labelText="Tarifa en $"
-                                id="tarifa"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={4}>
-                            <CustomInput
-                                labelText="Ciudad"
-                                id="ciudad"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                            <CustomInput
-                                labelText="Pais"
-                                id="pais"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                            <GridItem xs={12} sm={12} md={4}>
-                            <CustomInput
-                                labelText="Código Postal (opcional)"
-                                id="postal-code"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={12}>
-                            <InputLabel style={{ color: "#AAAAAA" }}>Acerca de Mí</InputLabel>
-                            <CustomInput
-                                labelText="Describe brevemente porque elegirte para ser contratado"
-                                id="about-me"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                multiline: true,
-                                rows: 3
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        <GridContainer>
-                            <GridItem xs={12} sm={12} md={12}>
-                            <InputLabel style={{ color: "#AAAAAA" }}>Mi Experiencia</InputLabel>
-                            <CustomInput
-                                labelText="En esta sección puedes detallar tu experiencia laboral"
-                                id="about-me"
-                                formControlProps={{
-                                fullWidth: true
-                                }}
-                                inputProps={{
-                                multiline: true,
-                                rows: 5
-                                }}
-                            />
-                            </GridItem>
-                        </GridContainer>
-                        </CardBody>
-                        <CardFooter>
-                            <Button color="warning">Actualizar Curriculum</Button>
-                        </CardFooter>
-                    </Card>
-                    </GridItem>
-
                 </GridContainer>
-            </div>
-     </div>
-        <Footer />
-    </div>
-  );
+                </div>
+            </Parallax>
+            
+            <div className={classNames(classes.main, classes.mainRaised)}>
+                <div className={classes.container}>
+                    <GridContainer>
+
+                        <GridItem xs={12} sm={12} md={4}>
+                        <UserAvatar />
+                        </GridItem>
+
+                        <GridItem xs={12} sm={12} md={8}>
+                        <Card>
+                            <CardHeader color="warning">
+                                <h3 className={classes.cardTitleWhite}>Curriculum de Trabajo</h3>
+                                <p className={classes.cardCategoryWhite}>Manten tu Curriculum Actualizado</p>
+                            </CardHeader>
+                            <CardBody>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Nombres"
+                                    id="firstName"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                      }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Apellidos"
+                                    id="lastName"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        error: true
+                                      }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Cedula"
+                                    id="cedula"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={6}>
+                                <CustomInput
+                                    labelText="Telefono"
+                                    id="telefono"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={3}>
+                                <CustomInput
+                                    labelText="Categoría Trabajo"
+                                    id="categoria"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={5}>
+                                <CustomInput
+                                    labelText="Nombre Trabajo"
+                                    id="trabajo"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={4}>
+                                <CustomInput
+                                    labelText="Tarifa en $"
+                                    id="tarifa"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={4}>
+                                <CustomInput
+                                    labelText="Ciudad"
+                                    id="ciudad"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={4}>
+                                <CustomInput
+                                    labelText="Pais"
+                                    id="pais"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                                <GridItem xs={12} sm={12} md={4}>
+                                <CustomInput
+                                    labelText="Código Postal (opcional)"
+                                    id="postalCode"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={12}>
+                                <InputLabel style={{ color: "#AAAAAA" }}>Acerca de Mí</InputLabel>
+                                <CustomInput
+                                    labelText="Describe brevemente porque elegirte para ser contratado"
+                                    id="aboutMe"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                    inputProps={{
+                                    multiline: true,
+                                    rows: 3
+                                    }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            <GridContainer>
+                                <GridItem xs={12} sm={12} md={12}>
+                                <InputLabel style={{ color: "#AAAAAA" }}>Mi Experiencia</InputLabel>
+                                <CustomInput
+                                    labelText="En esta sección puedes detallar tu experiencia laboral"
+                                    id="experiencia"
+                                    formControlProps={{
+                                    fullWidth: true
+                                    }}
+                                    inputProps={{
+                                    multiline: true,
+                                    rows: 5
+                                    }}
+                                />
+                                </GridItem>
+                            </GridContainer>
+                            </CardBody>
+                            <CardFooter>
+                                <Button color="warning">Actualizar Curriculum</Button>
+                            </CardFooter>
+                        </Card>
+                        </GridItem>
+
+                    </GridContainer>
+                </div>
+        </div>
+            <Footer />
+        </div>
+    );
 }

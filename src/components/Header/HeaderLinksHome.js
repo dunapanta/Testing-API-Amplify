@@ -12,7 +12,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Tooltip from "@material-ui/core/Tooltip";
 
 // @material-ui/icons
-import { Search, Accessibility, Apps }  from "@material-ui/icons";
+import {Search, Accessibility, Apps, SettingsApplications, Person, ExitToApp}  from "@material-ui/icons";
 
 // core components
 import CustomDropdown from "components/CustomDropdown/CustomDropdown.js";
@@ -64,6 +64,38 @@ export default function HeaderLinksHome(props) {
       </ListItem>
 
       <ListItem className={classes.listItem}>
+        <CustomDropdown
+          noLiPadding
+          buttonText="Sesión"
+          buttonProps={{
+            className: classes.navLink,
+            color: "transparent"
+          }}
+          buttonIcon={SettingsApplications}
+          dropdownList={[
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+              onClick={props.checkUser}
+            >
+              <Person className={classes.icons} /> Info Usuario
+            </Button>,
+
+            <Button
+              color="transparent"
+              target="_blank"
+              className={classes.navLink}
+              onClick={props.signOut}
+            >
+              <ExitToApp className={classes.icons} /> Salir
+            </Button>,
+            
+          ]}
+        />
+      </ListItem>
+
+      <ListItem className={classes.listItem}>
         <Tooltip
           id="github-tooltip"
           title="Ver Repositorio de Github"
@@ -80,6 +112,7 @@ export default function HeaderLinksHome(props) {
           </Button>
         </Tooltip>
       </ListItem>
+
     </List>
   );
 }
