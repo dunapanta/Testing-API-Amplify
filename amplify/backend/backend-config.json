@@ -11,6 +11,10 @@
 		"pruebausuario": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
+		},
+		"unapantapruebatesiss3": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {

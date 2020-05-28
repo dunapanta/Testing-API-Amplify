@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -21,6 +21,9 @@ import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import UserAvatar from 'views/UserCurriculum/UserCurriculumSections/UserAvatar';
+import Spinner from 'views/Loading/Spinner';
+//AWS
+import Amplify, { Auth, API } from "aws-amplify";
 
 const styles2 = {
   cardCategoryWhite: {
@@ -43,8 +46,9 @@ const styles2 = {
 
 const useStyles = makeStyles(styles, styles2);
 
-export default function UserCurriculum() {
+export default function UserCurriculum(props) {
   
+    const {checkUser, signOut} = props
     const [userCurriculum, setUserCurriculum] = useState({
         firstName: "",
         lastName: "",
@@ -58,14 +62,138 @@ export default function UserCurriculum() {
         postalCode: "",
         aboutMe: "",
         experiencia: "",
+        user: null
     });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getCurrentUserAsync()
+    }, [])
 
     const handleCurriculumInput = e => {
         setUserCurriculum({
             ...userCurriculum,
             [e.target.id] : e.target.value
         });
-        console.log(userCurriculum.firstName);
+    }
+
+    const submitCurriculum = () => {
+        const {usuario} = props;
+        console.log(userCurriculum);
+        console.log("El usuario es:", usuario);
+        console.log("El id es:", usuario.user.sub);
+        console.log("atributos:", userCurriculum);
+        let apiName = "pruebatesis";
+        let path = "/user";
+        let data = {
+            body: {
+                user_id: usuario.user.sub,
+                ...userCurriculum
+            }
+        };
+        console.log("La data ecrita:", data);
+        API.post(apiName, path, data)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(error => {
+                console.log(error.response)
+            })
+    }
+
+    const getCurrentUser = () => {
+        Auth.currentAuthenticatedUser({bypassCache: true}).then(user => {
+            setUserCurriculum(userCurriculum.user = user)
+            console.log("getUser",userCurriculum.user )
+            console.log("getUser",userCurriculum.user.attributes.sub )
+        })
+       /*  getUserCurriculum(); */
+    }
+
+    const getCurrentUserAsync = async () => {
+       
+        let currentUser= await Auth.currentAuthenticatedUser();
+        console.log("Todo",currentUser)
+        let user = { username: currentUser.username, ...currentUser.attributes }
+        const { attributes } = currentUser;
+        console.log("Atributos desde Async", attributes)
+        console.log("Email desde Async", attributes.email)
+        console.log("Usuario definido por mi",user)
+        setUserCurriculum(
+            userCurriculum.user = user
+        )
+        console.log("Desde useState", userCurriculum);
+        // Con este metodo obtengo los datos de dynamo y los pongo en state userCurriculum
+        getUserCurriculumAsync();
+        // paso a false loading
+        
+    }
+
+    //Para hacer fetch
+    const getUserCurriculum = () => {
+        /* const {usuario} = props; */
+        
+        let path = `/user/23760e28-dbbd-43a7-8b4c-c9fd0c9e069d`;
+        const apiName = "pruebatesis";
+        API.get(apiName, path)
+        .then(response => {
+            console.log("Con User ID",response[0]);
+            console.log("Pin pan p",userCurriculum.user);
+
+            setUserCurriculum(
+                userCurriculum.firstName=response[0].firstName,
+                //userCurriculum.loading= false,
+               /*  userCurriculum.lastName=response[0].lastName,
+                userCurriculum.cedula=response[0].cedula,
+                userCurriculum.telefono=response[0].telefono,
+                userCurriculum.categoria=response[0].categoria,
+                userCurriculum.trabajo=response[0].trabajo,
+                userCurriculum.tarifa=response[0].tarifa,
+                userCurriculum.ciudad=response[0].ciudad,
+                userCurriculum.pais=response[0].pais,
+                userCurriculum.postalCode=response[0].postalCode,
+                userCurriculum.aboutMe=response[0].aboutMe,
+                userCurriculum.experienciaresponse[0].experiencia, */
+                )
+            console.log(userCurriculum);
+        })
+        .catch(error => {
+            console.log(error)
+        })
+    }
+
+     //Para hacer fetch
+     const getUserCurriculumAsync = async () => {
+        let path = `/user/${userCurriculum.user.sub}`;
+        const apiName = "pruebatesis";
+        
+        const response  = await API.get(apiName, path);
+        console.log("Respuesta Async Await",response);
+        console.log("Comparacion". response === undefined)
+        try{
+        setUserCurriculum({
+            firstName:response[0].firstName,
+            lastName:response[0].lastName,
+            cedula:response[0].cedula,
+            telefono:response[0].telefono,
+            categoria:response[0].categoria,
+            trabajo:response[0].trabajo,
+            tarifa:response[0].tarifa,
+            ciudad:response[0].ciudad,
+            pais:response[0].pais,
+            postalCode:response[0].postalCode,
+            aboutMe:response[0].aboutMe,
+            experiencia:response[0].experiencia,
+            })
+            console.log("Final usuario con useState",userCurriculum)}
+            catch(err){
+                console.log("Error que se prodria mejorar mas adelante",err)
+            }
+        
+            setLoading(false);
+
+        
+        
     }
 
     const classes = useStyles();
@@ -73,7 +201,12 @@ export default function UserCurriculum() {
         <div>
             <Header
                     brand="Proyecto Titulación"
-                    rightLinks={<HeaderLinksHome />}
+                    rightLinks={
+                        <HeaderLinksHome
+                            checkUser={checkUser}
+                            signOut={signOut}
+                        />
+                    }
                     fixed
                     color="dark"
                     changeColorOnScroll={{
@@ -98,7 +231,7 @@ export default function UserCurriculum() {
                 </div>
             </Parallax>
             
-            <div className={classNames(classes.main, classes.mainRaised)}>
+            {loading ? <Spinner /> : <div className={classNames(classes.main, classes.mainRaised)}>
                 <div className={classes.container}>
                     <GridContainer>
 
@@ -124,6 +257,7 @@ export default function UserCurriculum() {
                                     inputProps={{
                                         type: "text",
                                         onChange: handleCurriculumInput,
+                                        value: userCurriculum.firstName
                                       }}
                                 />
                                 </GridItem>
@@ -137,7 +271,7 @@ export default function UserCurriculum() {
                                     inputProps={{
                                         type: "text",
                                         onChange: handleCurriculumInput,
-                                        error: true
+                                        value: userCurriculum.lastName
                                       }}
                                 />
                                 </GridItem>
@@ -150,6 +284,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.cedula
+                                      }}
                                 />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={6}>
@@ -159,6 +298,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.telefono
+                                      }}
                                 />
                                 </GridItem>
                             </GridContainer>
@@ -170,6 +314,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.categoria
+                                      }}
                                 />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={5}>
@@ -179,6 +328,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.trabajo
+                                      }}
                                 />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={4}>
@@ -188,6 +342,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.tarifa
+                                      }}
                                 />
                                 </GridItem>
                             </GridContainer>
@@ -199,6 +358,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.ciudad
+                                      }}
                                 />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={4}>
@@ -208,6 +372,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.pais
+                                      }}
                                 />
                                 </GridItem>
                                 <GridItem xs={12} sm={12} md={4}>
@@ -217,6 +386,11 @@ export default function UserCurriculum() {
                                     formControlProps={{
                                     fullWidth: true
                                     }}
+                                    inputProps={{
+                                        type: "text",
+                                        onChange: handleCurriculumInput,
+                                        value: userCurriculum.postalCode
+                                      }}
                                 />
                                 </GridItem>
                             </GridContainer>
@@ -230,6 +404,9 @@ export default function UserCurriculum() {
                                     fullWidth: true
                                     }}
                                     inputProps={{
+                                    type: "text",
+                                    onChange: handleCurriculumInput,
+                                    value: userCurriculum.aboutMe,
                                     multiline: true,
                                     rows: 3
                                     }}
@@ -238,7 +415,7 @@ export default function UserCurriculum() {
                             </GridContainer>
                             <GridContainer>
                                 <GridItem xs={12} sm={12} md={12}>
-                                <InputLabel style={{ color: "#AAAAAA" }}>Mi Experiencia</InputLabel>
+                                <InputLabel style={{ color: "#AAAAAA" }}>Mi Experiencia Laboral</InputLabel>
                                 <CustomInput
                                     labelText="En esta sección puedes detallar tu experiencia laboral"
                                     id="experiencia"
@@ -246,6 +423,9 @@ export default function UserCurriculum() {
                                     fullWidth: true
                                     }}
                                     inputProps={{
+                                    type: "text",
+                                    onChange: handleCurriculumInput,
+                                    value: userCurriculum.experiencia,
                                     multiline: true,
                                     rows: 5
                                     }}
@@ -254,14 +434,18 @@ export default function UserCurriculum() {
                             </GridContainer>
                             </CardBody>
                             <CardFooter>
-                                <Button color="warning">Actualizar Curriculum</Button>
+                                <Button 
+                                    color="warning" 
+                                    onClick={submitCurriculum}>
+                                    Actualizar Curriculum
+                                </Button>
                             </CardFooter>
                         </Card>
                         </GridItem>
 
                     </GridContainer>
                 </div>
-        </div>
+        </div>}
             <Footer />
         </div>
     );

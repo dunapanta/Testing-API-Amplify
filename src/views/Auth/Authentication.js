@@ -34,7 +34,6 @@ import { Switch, Route, useHistory} from 'react-router-dom';
             console.log(user)
             if(user.email_verified){
                 setUsuario({
-                    ...usuario,
                     user
                 })
             }
@@ -45,7 +44,10 @@ import { Switch, Route, useHistory} from 'react-router-dom';
     const checkUser = () => {
         console.log("INFO de SESSION");
         Auth.currentAuthenticatedUser()
-        .then(user => console.log({ user }))
+        .then(user => {
+            console.log("USUARIO", usuario)
+            console.log({ user })
+        })
         .catch(err => console.log(err))
     }
 
@@ -64,8 +66,6 @@ import { Switch, Route, useHistory} from 'react-router-dom';
             ...usuario,
             [e.target.id] : e.target.value
         });
-        console.log(usuario.username);
-        console.log(usuario.email);
     }
 
     return(
@@ -92,7 +92,11 @@ import { Switch, Route, useHistory} from 'react-router-dom';
                        />
                </Route>
                <Route path="/curriculum">
-                      <UserCurriculum />
+                      <UserCurriculum 
+                      checkUser={checkUser}
+                      signOut={signOut}
+                      usuario={usuario}
+                      />
                </Route>
                <Route path="/">
                     <RegistrationPage
