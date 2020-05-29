@@ -13,8 +13,11 @@ import Hidden from "@material-ui/core/Hidden";
 import Drawer from "@material-ui/core/Drawer";
 // @material-ui/icons
 import Menu from "@material-ui/icons/Menu";
+//Router
+import { Link } from "react-router-dom";
 // core components
 import styles from "assets/jss/material-kit-react/components/headerStyle.js";
+
 
 const useStyles = makeStyles(styles);
 
@@ -60,7 +63,7 @@ export default function Header(props) {
     [classes.absolute]: absolute,
     [classes.fixed]: fixed
   });
-  const brandComponent = <Button className={classes.title}>{brand}</Button>;
+  const brandComponent = <Link to="/home" style={{ color: 'inherit', textDecoration: 'inherit' }}><Button className={classes.title}>{brand}</Button> </Link>;
   return (
     <AppBar className={appBarClasses}>
       <Toolbar className={classes.container}>
