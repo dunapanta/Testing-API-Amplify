@@ -59,8 +59,6 @@ export const HomePage = (props) => {
                 <InfoSection />
                 </div>
             </div>
-            <button onClick={props.checkUser}>Check User</button>
-            <button onClick={props.signOut}>Sign Out</button>
             <Footer />
         </div>
     );
