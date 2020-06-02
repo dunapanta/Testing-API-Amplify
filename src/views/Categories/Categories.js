@@ -20,7 +20,6 @@ import Footer from "components/Footer/Footer.js";
 import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
-import UserAvatar from 'views/UserCurriculum/UserCurriculumSections/UserAvatar';
 import Spinner from 'views/Loading/Spinner';
 //AWS
 import Amplify, { Auth, API } from "aws-amplify";
@@ -31,14 +30,15 @@ const useStyles = makeStyles(styles);
 export default function Categories(props) {
     const classes = useStyles();
     const {checkUser, signOut} = props;
-    const [user, setUser] = useState();
+    const [listWorkers, setListWorkers] = useState([]);
+    const [loading, setLoading] = useState(true);
 
    /*  useEffect(() => {
         getCurrentUserAsync();
         console.log("Desde UseEffect",user);
       }, []); */
 
-      const getCurrentUserAsync = async () => {
+      /* const getCurrentUserAsync = async () => {
        
         let currentUser= await Auth.currentAuthenticatedUser();
         let user = { username: currentUser }
@@ -48,46 +48,23 @@ export default function Categories(props) {
         )
         console.log("Todo User", user);
   
-        }
+        } */
 
         //Para hacer fetch
      const getUserCurriculumAsync = async () => {
        /*  let path = `/user/${userCurriculum.user.sub}`; */
        let path = "/user";
         const apiName = "pruebatesis";
-        let myInit = { // OPTIONAL
-            headers: {}, // OPTIONAL
-            queryStringParameters: {  // OPTIONAL
-            },
-            response: true,
-        }
-        const response  = await API.get(apiName, path, myInit);
+        /* let myInit = {
+            headers: {},
+            queryStringParameters: { 
+            firstName: 'Andres'
+            }
+        } */
+        const response  = await API.get(apiName, path);
         console.log("Respuesta Async Await",response);
     }
 
-   /*  const getUserCurriculumAsyncD = async () => {
-        let path = `/user/${userCurriculum.user.sub}`; 
-        let path = "/user";
-         const apiName = "pruebatesis";
-         const response  = await API.get(apiName, path, function (req, res) {
-            var params = {
-                TableName: tableName,
-                Select: 'ALL_ATTRIBUTES',
-              }; 
-              dynamodb.scan(params, (err, data) => {
-                if (err) {
-                  res.json({ error: 'Could not load items: ' + err.message });
-                }
-                res.json({
-                  data: data.Items.map(item => {
-                    return item;
-                  })
-                });
-              });
-            
-         });
-         console.log("Respuesta Async Await",response);
-     } */
     const CardUser = (
         <Card profile>
             <CardHeader color="info">
@@ -100,6 +77,8 @@ export default function Categories(props) {
             </a>
             </CardAvatar>
             <CardBody profile>
+                <strong style={ {display: "block", fontSize: "18px", textAlign: "center", padding:"6px"}}>Nombre:</strong>
+                <strong style={ {display: "block", fontSize: "14px", textAlign: "center", margin:"12px"}}>Tarifa:</strong>
                 <p className={classes.description}>
                     En esta parte estaría detallado ya sea la breve descripción
                     del usuario o la experiencia

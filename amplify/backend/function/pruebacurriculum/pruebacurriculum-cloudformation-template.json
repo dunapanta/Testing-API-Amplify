@@ -76,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-amplify-api-prueba-dev-181437-deployment",
-					"S3Key": "amplify-builds/pruebacurriculum-4b43327a6f484833386f-build.zip"
+					"S3Key": "amplify-builds/pruebacurriculum-4d506459556c6c7a7a4b-build.zip"
 				}
 			}
 		},

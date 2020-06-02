@@ -77,17 +77,28 @@ export default function UserCurriculum(props) {
         });
     }
 
-    const submitCurriculum = () => {
-        const {usuario} = props;
-        console.log(userCurriculum);
-        console.log("El usuario es:", usuario);
-        console.log("El id es:", usuario.user.sub);
-        console.log("atributos:", userCurriculum);
+    const submitCurriculumAsync = async () => {
+        await getCurrentUserAsync();
         let apiName = "pruebatesis";
         let path = "/user";
         let data = {
             body: {
-                user_id: usuario.user.sub,
+                user_id: userCurriculum.user.sub,
+                ...userCurriculum
+            }
+        };
+        console.log("Curriculum Actualizado")
+        return await API.post(apiName, path, data)
+    }
+
+    const submitCurriculum = () => {
+        console.log("El id es:", userCurriculum.user.sub);
+        console.log("id y atributos:", userCurriculum);
+        let apiName = "pruebatesis";
+        let path = "/user";
+        let data = {
+            body: {
+                user_id: userCurriculum.user.sub,
                 ...userCurriculum
             }
         };
@@ -126,6 +137,21 @@ export default function UserCurriculum(props) {
         // Con este metodo obtengo los datos de dynamo y los pongo en state userCurriculum
         getUserCurriculumAsync();
         // paso a false loading
+        
+    }
+
+    const UserForSubmit = async () => {
+       
+        let currentUser= await Auth.currentAuthenticatedUser();
+        console.log("Todo",currentUser)
+        let user = { username: currentUser.username, ...currentUser.attributes }
+        const { attributes } = currentUser;
+        console.log("Atributos desde Async", attributes)
+        console.log("Email desde Async", attributes.email)
+        console.log("Usuario definido por mi",user)
+        setUserCurriculum(
+            userCurriculum.user = user
+        )
         
     }
 
@@ -436,7 +462,7 @@ export default function UserCurriculum(props) {
                             <CardFooter>
                                 <Button 
                                     color="warning" 
-                                    onClick={submitCurriculum}>
+                                    onClick={submitCurriculumAsync}>
                                     Actualizar Curriculum
                                 </Button>
                             </CardFooter>
