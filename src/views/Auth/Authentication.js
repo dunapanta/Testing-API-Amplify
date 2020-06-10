@@ -9,6 +9,7 @@ import Categories from 'views/Categories/Categories';
 import CategoriaEducacion from 'views/Categories/CategoryEducation';
 import CategoriaHogar from 'views/Categories/CategoryHome';
 import CategoriaTecnologia from 'views/Categories/CategoryTecnology';
+import Contrato from 'views/Contrato/Contrato';
 //Amplify integracion Cognito
 import { Auth } from "aws-amplify";
 //Routing
@@ -125,6 +126,13 @@ import { Switch, Route, useHistory} from 'react-router-dom';
                </Route>
                <Route path="/category-tecnology">
                       <CategoriaTecnologia 
+                      checkUser={checkUser}
+                      signOut={signOut}
+                      usuario={usuario}
+                      />
+               </Route>
+               <Route path="/contrato">
+                      <Contrato 
                       checkUser={checkUser}
                       signOut={signOut}
                       usuario={usuario}

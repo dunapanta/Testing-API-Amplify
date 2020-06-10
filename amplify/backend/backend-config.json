@@ -15,6 +15,10 @@
 		"unapantapruebatesiss3": {
 			"service": "S3",
 			"providerPlugin": "awscloudformation"
+		},
+		"pruebacontratacion": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {
@@ -36,6 +40,25 @@
 					}
 				}
 			]
+		},
+		"pruebacontratacion": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "pruebacontratacion",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
 		}
 	},
 	"api": {
@@ -46,6 +69,20 @@
 				{
 					"category": "function",
 					"resourceName": "pruebacurriculum",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
+		},
+		"pruebatesiscontratacion": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "pruebacontratacion",
 					"attributes": [
 						"Name",
 						"Arn"

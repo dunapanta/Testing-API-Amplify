@@ -1,0 +1,5 @@
+{
+    "tableName": "pruebacontratacion",
+    "partitionKeyName": "id_contratacion",
+    "partitionKeyType": "S"
+}

@@ -7,7 +7,7 @@ const profilePageStyle = {
   profile: {
     textAlign: "center",
     "& img": {
-      maxWidth: "160px",
+      maxWidth: "200px",
       width: "100%",
       margin: "0 auto",
       transform: "translate3d(0, -50%, 0)"
@@ -16,7 +16,7 @@ const profilePageStyle = {
   description: {
     margin: "1.071rem auto 0",
     maxWidth: "600px",
-    color: "#999",
+    color: "#000",
     textAlign: "center !important"
   },
   name: {
@@ -37,6 +37,7 @@ const profilePageStyle = {
   title: {
     ...title,
     display: "inline-block",
+    fontSize: "200%",
     position: "relative",
     marginTop: "30px",
     minHeight: "32px",
