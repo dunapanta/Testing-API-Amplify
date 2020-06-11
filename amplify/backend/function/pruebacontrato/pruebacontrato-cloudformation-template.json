@@ -10,13 +10,13 @@
 		"env": {
 			"Type": "String"
 		},
-		"storagepruebacontratacionName": {
+		"storagepruebacontratoName": {
 			"Type": "String",
-			"Default": "storagepruebacontratacionName"
+			"Default": "storagepruebacontratoName"
 		},
-		"storagepruebacontratacionArn": {
+		"storagepruebacontratoArn": {
 			"Type": "String",
-			"Default": "storagepruebacontratacionArn"
+			"Default": "storagepruebacontratoArn"
 		}
 	},
 	"Conditions": {
@@ -41,12 +41,12 @@
 				"FunctionName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"pruebacontratacion",
+						"pruebacontrato",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"pruebacontratacion",
+									"pruebacontrato",
 									"-",
 									{
 										"Ref": "env"
@@ -76,7 +76,7 @@
 				"Timeout": "25",
 				"Code": {
 					"S3Bucket": "amplify-amplify-api-prueba-dev-181437-deployment",
-					"S3Key": "amplify-builds/pruebacontratacion-73676b5548746a415172-build.zip"
+					"S3Key": "amplify-builds/pruebacontrato-50316e73762b556c4563-build.zip"
 				}
 			}
 		},
@@ -86,12 +86,12 @@
 				"RoleName": {
 					"Fn::If": [
 						"ShouldNotCreateEnvResources",
-						"amplifyapipruebaLambdaRolec45eeb13",
+						"amplifyapipruebaLambdaRole9beb032f",
 						{
 							"Fn::Join": [
 								"",
 								[
-									"amplifyapipruebaLambdaRolec45eeb13",
+									"amplifyapipruebaLambdaRole9beb032f",
 									"-",
 									{
 										"Ref": "env"
@@ -170,14 +170,14 @@
 							],
 							"Resource": [
 								{
-									"Ref": "storagepruebacontratacionArn"
+									"Ref": "storagepruebacontratoArn"
 								},
 								{
 									"Fn::Join": [
 										"/",
 										[
 											{
-												"Ref": "storagepruebacontratacionArn"
+												"Ref": "storagepruebacontratoArn"
 											},
 											"index/*"
 										]

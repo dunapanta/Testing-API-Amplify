@@ -19,6 +19,10 @@
 		"pruebacontratacion": {
 			"service": "DynamoDB",
 			"providerPlugin": "awscloudformation"
+		},
+		"pruebacontrato": {
+			"service": "DynamoDB",
+			"providerPlugin": "awscloudformation"
 		}
 	},
 	"function": {
@@ -59,6 +63,25 @@
 					}
 				}
 			]
+		},
+		"pruebacontrato": {
+			"build": true,
+			"providerPlugin": "awscloudformation",
+			"service": "Lambda",
+			"dependsOn": [
+				{
+					"category": "storage",
+					"resourceName": "pruebacontrato",
+					"attributes": [
+						"Name",
+						"Arn"
+					],
+					"attributeEnvMap": {
+						"Name": "TABLE_NAME",
+						"Arn": "TABLE_ARN"
+					}
+				}
+			]
 		}
 	},
 	"api": {
@@ -83,6 +106,20 @@
 				{
 					"category": "function",
 					"resourceName": "pruebacontratacion",
+					"attributes": [
+						"Name",
+						"Arn"
+					]
+				}
+			]
+		},
+		"pruebacontrato": {
+			"service": "API Gateway",
+			"providerPlugin": "awscloudformation",
+			"dependsOn": [
+				{
+					"category": "function",
+					"resourceName": "pruebacontrato",
 					"attributes": [
 						"Name",
 						"Arn"

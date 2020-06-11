@@ -1,0 +1,41 @@
+{
+    "paths": [
+        {
+            "name": "/pruebacontratos",
+            "lambdaFunction": "pruebacontrato",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH",
+                    "/DELETE"
+                ]
+            }
+        }
+    ],
+    "resourceName": "pruebacontrato",
+    "apiName": "pruebacontrato",
+    "functionArns": [
+        {
+            "lambdaFunction": "pruebacontrato"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-amplify-api-prueba-dev-181437-authRole",
+        "unAuthRoleName": "amplify-amplify-api-prueba-dev-181437-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "pruebacontrato",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
