@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
@@ -15,7 +15,8 @@ const useStyles = makeStyles(styles);
 
 export default function CustomTable(props) {
   const classes = useStyles();
-  const { tableHead, tableData, tableHeaderColor, calificacion } = props;
+  const { tableHead, tableData, tableHeaderColor, datosContratados,calificacion } = props;
+  const [dispalyReview, setDisplayReview] = useState(false);
   return (
     <div className={classes.tableResponsive}>
       <Table className={classes.table}>
@@ -38,7 +39,6 @@ export default function CustomTable(props) {
         <TableBody>
           {tableData.map((prop, key) => {
             return (
-              <>
               <TableRow key={key} className={classes.tableBodyRow}>
                 {prop.map((prop, key) => {
                   return (
@@ -48,8 +48,6 @@ export default function CustomTable(props) {
                   );
                 })}
               </TableRow>
-              {calificacion ? <TableRow><Button color="success" size="sm">Calificar Trabajador</Button></TableRow> : null}
-              </>
             );
           })}
         </TableBody>

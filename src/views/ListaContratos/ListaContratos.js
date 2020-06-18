@@ -21,8 +21,12 @@ import HeaderLinksHome from "components/Header/HeaderLinksHome.js";
 
 import styles from "assets/jss/material-kit-react/views/components.js";
 import Spinner from 'views/Loading/Spinner';
+
+import ReactStars from "react-rating-stars-component";
 //AWS
 import Amplify, { Auth, API } from "aws-amplify";
+//React Router
+import { useHistory } from "react-router-dom"
 
 const styles2 = {
     cardCategoryWhite: {
@@ -58,6 +62,8 @@ const useStyles = makeStyles(styles, styles2);
 export default function ListaContratos(props) {
     const classes = useStyles();//routing con programacion sin Link
     const {checkUser, signOut} = props;
+    const history = useHistory();
+    const [datosContratados, setDatosContratados] = useState([])
     const [listaRenderizar, setListaRenderizar] = useState([]);
     const [calificacion, setCalificacion] = useState();
     const [loading, setLoading] = useState(false);
@@ -101,15 +107,24 @@ export default function ListaContratos(props) {
             datosTrabajador.forEach( (objetoTrab) => {
                 objetoTrab.id_contrato = contratado.id_contrato
                 objetoTrab.fecha_contratacion = contratado.fecha_contratacion
+                objetoTrab.calificacion = contratado.calificacion
             })
             contratados.push(datosTrabajador);
             console.log("Datos TRABAJADOR CONTRATADO", contratados)
         }
 
+        setDatosContratados(contratados)
+
         let listaAux = []
-        contratados.forEach( async (trab) => {
-            trab.forEach( async (traba) => {
-                listaAux.push([`${traba.firstName} ${traba.lastName}`, traba.categoria, traba.trabajo, traba.fecha_contratacion])
+        contratados.forEach( (trab) => {
+            trab.forEach( (traba) => {
+                listaAux.push([`${traba.firstName} ${traba.lastName}`, traba.categoria, traba.trabajo, traba.fecha_contratacion, traba.calificacion ? <ReactStars
+                size={25}
+                count={5}
+                value={+traba.calificacion}
+               /*  onChange={ratingChanged} */
+                color2={"#ffd700"}
+            /> : <Button color="sucess" onClick={() => handlePerfil(traba.user_id, traba.user.username, traba.id_contrato)}>Calificar</Button> ])
             } ) 
         } )
 
@@ -120,7 +135,15 @@ export default function ListaContratos(props) {
         setLoading(false)
         
     }
-  
+
+    const handlePerfil = (id_trabajador, username, id_contrato) => {
+        console.log("Id Usuario", id_trabajador)
+        /* history.push(`/contrato/${id_trabajador}`) */
+        history.push({pathname: "/contrato",
+                        state:{ id_trabajador: id_trabajador,
+                                username: username,
+                                id_contrato: id_contrato}, })
+        }
 
     return (
         <div>
@@ -155,9 +178,22 @@ export default function ListaContratos(props) {
                 </GridContainer>
                 </div>
             </Parallax>
-           {/*  <Button onClick={getUserAsync}>Obtener Datos API</Button>
-            <Button onClick={listaContratos}>Contratos</Button>
-            <Button onClick={contratosEmpleador}>Contratos Empleador</Button> */}
+
+           {/*  <ReactStars
+                size={100}
+                count={5}
+                onChange={ratingChanged}
+                color2={"#ffd700"}
+            /> */}
+
+               {/*  <ReactStars
+                    size={100}
+                    onChange={ratingChanged}
+                    emptyIcon={<i className="far fa-star" />}
+                    halfIcon={<i className="fa fa-star-half-alt" />}
+                    filledIcon={<i className="fa fa-star" />}
+                /> */}
+                    
             {loading ? <Spinner/> : <GridContainer>
                 <GridItem xs={12} sm={12} md={12}>
                     <Card>
@@ -169,9 +205,10 @@ export default function ListaContratos(props) {
                     <CardBody>
                         <Table
                         tableHeaderColor="success"
-                        tableHead={["Trabajador", "Categoría", "Trabajo", "Fecha Contrato"]}
+                        tableHead={["Trabajador", "Categoría", "Trabajo", "Fecha Contrato", "Calificacion"]}
                         tableData={listaRenderizar}
                         calificacion={calificacion}
+                        datosContratados={datosContratados}
                         />
                     </CardBody>
                     </Card>
